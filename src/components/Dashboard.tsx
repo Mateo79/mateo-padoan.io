@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import NetworkWidget from './NetworkWidget';
-import BatteryWidget from './BatteryWidget';
+import ContactForm from './ContactForm';
+import { FaSun, FaMoon, FaPlus, FaCircle } from './icons/ReactIcons';
 
 // Temps réel
 const useRealTime = () => {
@@ -24,10 +25,10 @@ const WeatherClock = () => {
 
   const getIcon = () => {
     const h = now.getHours();
-    if (h >= 6 && h < 12) return '🌅';
-    if (h >= 12 && h < 18) return '☀️';
-    if (h >= 18 && h < 22) return '🌇';
-    return '🌙';
+    // Jour 
+    if (h >= 6 && h < 18) return <FaSun className="w-5 h-5 text-yellow-400" />;
+    // Nuit
+    return <FaMoon className="w-5 h-5 text-blue-300" />;
   };
 
   return (
@@ -136,9 +137,9 @@ const TodoWidget = () => {
         />
         <button
           onClick={addTodo}
-          className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded-r text-sm font-bold"
+          className="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded-r text-sm font-bold flex items-center justify-center"
         >
-          +
+          <FaPlus className="w-3 h-3" />
         </button>
       </div>
       <ul className="text-sm space-y-1 max-h-24 overflow-y-auto">
@@ -147,7 +148,7 @@ const TodoWidget = () => {
         ) : (
           todos.map((todo, i) => (
             <li key={i} className="flex items-start">
-              <span className="text-yellow-400 mr-2">•</span>
+              <FaCircle className="w-2 h-2 text-yellow-400 mr-2 mt-1.5" />
               <span>{todo}</span>
             </li>
           ))
@@ -163,11 +164,8 @@ export default function Dashboard() {
       <WeatherClock />
       <SystemStatus />
       <NetworkWidget />
-      <BatteryWidget />
       <TodoWidget />
-      <div className="bg-gray-900 border border-gray-700 p-4 rounded-lg text-gray-500 italic">
-        Widget personnalisé
-      </div>
+      <ContactForm />
     </div>
   );
 }

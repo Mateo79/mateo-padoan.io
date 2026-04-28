@@ -2,3 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === Variables CSS globales === */
+:root {
+    --bg-primary: #000000;
+    --bg-secondary: #111827;
+    --text-primary: #ffffff;
+    --text-secondary: #d1d5db;
+    --accent: #8b5cf6;
+}
+
+/* Thème clair */
+[data-theme='light'] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f4f6;
+    --text-primary: #000000;
+    --text-secondary: #374151;
+    --accent: #7c3aed;
+}
+
+/* === Mode contraste élevé === */
+.high-contrast {
+    --bg-primary: #000 !important;
+    --bg-secondary: #000 !important;
+    --text-primary: #fff !important;
+    --text-secondary: #fff !important;
+    --accent: #ff0 !important;
+}
+
+.high-contrast a {
+    color: #ff0 !important;
+}
+
+.high-contrast button {
+    border: 2px solid #fff !important;
+}
+
+.high-contrast input,
+.high-contrast textarea {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+/* === Appliquer les variables === */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}

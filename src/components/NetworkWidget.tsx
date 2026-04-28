@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { FaWifi, FaGlobe, FaLaptop, FaMapMarkerAlt, FaInfo } from 'react-icons/fa';
 
 const NetworkWidget = () => {
   const [publicIP, setPublicIP] = useState<string>('Chargement...');
-  const [location, setLocation] = useState<string>('Chargement...');
+  const [, setLocation] = useState<string>('Chargement...');
   const [connectionType, setConnectionType] = useState<string>('Inconnu');
 
   const isDev = process.env.NODE_ENV === 'development';
@@ -57,17 +58,46 @@ const NetworkWidget = () => {
 
   return (
     <div className="bg-gray-900 border border-red-500/20 p-4 rounded-lg">
-      <h2 className="text-red-400 font-semibold mb-3">Réseau</h2>
-      <div className="text-sm space-y-1 text-gray-300">
-        <div>Type: <span className="text-cyan-400">{connectionType}</span></div>
-        <div>IP Publique: <span className="text-green-400">{publicIP}</span></div>
-        <div>IP Locale: <span className="text-yellow-400">{localIP}</span></div>
-        <div>Localisation: <span className="text-purple-400">{location}</span></div>
+      {/* Titre avec icône Wifi */}
+      <h2 className="text-red-400 font-semibold mb-3 flex items-center">
+        <FaWifi className="mr-2" />
+        Réseau
+      </h2>
+      
+      <div className="text-sm space-y-2 text-gray-300">
+        {/* Type de connexion */}
+        <div className="flex items-center">
+          <FaWifi className="mr-2 text-cyan-400 w-4 h-4" />
+          <span>Type:</span> 
+          <span className="ml-2 text-cyan-400">{connectionType}</span>
+        </div>
+
+        {/* IP Publique */}
+        <div className="flex items-center">
+          <FaGlobe className="mr-2 text-green-400 w-4 h-4" />
+          <span>IP Publique:</span> 
+          <span className="ml-2 text-green-400">{publicIP}</span>
+        </div>
+
+        {/* IP Locale */}
+        <div className="flex items-center">
+          <FaLaptop className="mr-2 text-yellow-400 w-4 h-4" />
+          <span>IP Locale:</span> 
+          <span className="ml-2 text-yellow-400">{localIP}</span>
+        </div>
+
+        {/* Localisation */}
+        <div className="flex items-center">
+          <FaMapMarkerAlt className="mr-2 text-purple-400 w-4 h-4" />
+          <span>Localisation:</span> 
+          <span className="ml-2 text-purple-400">Lille</span>
+        </div>
       </div>
 
       {!isDev && (
-        <div className="mt-3 text-xs text-gray-500 border-t border-gray-800 pt-2">
-          ℹ️ IP locale et SSID non accessibles pour des raisons de sécurité navigateur.
+        <div className="mt-3 text-xs text-gray-500 border-t border-gray-800 pt-2 flex items-center gap-2">
+          <FaInfo className="text-gray-500 w-4 h-4" />
+          <span>IP locale et SSID non accessibles pour des raisons de sécurité navigateur.</span>
         </div>
       )}
     </div>
