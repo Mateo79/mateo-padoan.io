@@ -25,10 +25,6 @@ import {
   FiCheck as FiCheckIcon
 } from '../components/icons/ReactIcons';
 
-// ─────────────────────────────────────────────────────────────
-// Types & Utilitaires GitHub API
-// ─────────────────────────────────────────────────────────────
-
 interface GithubRepo {
   id: number;
   name: string;
@@ -47,7 +43,7 @@ const fetchGithubRepos = async (): Promise<GithubRepo[]> => {
       'https://api.github.com/users/Mateo79/repos?sort=updated&per_page=10'
     );
     if (!response.ok) throw new Error('Erreur API GitHub');
-    
+
     const data = await response.json();
     // Garde uniquement tes repos (pas les forks)
     return data.filter((repo: GithubRepo) => !repo.fork);
@@ -72,10 +68,6 @@ const getLanguageColor = (lang: string | null): string => {
   return colors[lang || ''] || 'bg-gray-500';
 };
 
-// ─────────────────────────────────────────────────────────────
-// Composant Principal
-// ─────────────────────────────────────────────────────────────
-
 interface AboutProps {
   onPageChange?: (page: 'about' | 'dashboard') => void;
 }
@@ -83,7 +75,7 @@ interface AboutProps {
 const About: React.FC<AboutProps> = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'about' | 'projects' | 'experience'>('about');
-  
+
   // State pour les repos GitHub
   const [githubRepos, setGithubRepos] = useState<GithubRepo[]>([]);
   const [reposLoading, setReposLoading] = useState(true);
@@ -185,31 +177,28 @@ const About: React.FC<AboutProps> = () => {
         <div className="flex gap-4 mb-8 border-b border-gray-700">
           <button
             onClick={() => setActiveTab('about')}
-            className={`px-6 py-3 font-medium transition-all ${
-              activeTab === 'about'
+            className={`px-6 py-3 font-medium transition-all ${activeTab === 'about'
                 ? 'text-cyan-400 border-b-2 border-cyan-400'
                 : 'text-gray-400 hover:text-white'
-            }`}
+              }`}
           >
             {t('section.about')}
           </button>
           <button
             onClick={() => setActiveTab('projects')}
-            className={`px-6 py-3 font-medium transition-all ${
-              activeTab === 'projects'
+            className={`px-6 py-3 font-medium transition-all ${activeTab === 'projects'
                 ? 'text-cyan-400 border-b-2 border-cyan-400'
                 : 'text-gray-400 hover:text-white'
-            }`}
+              }`}
           >
             {t('section.projects')}
           </button>
           <button
             onClick={() => setActiveTab('experience')}
-            className={`px-6 py-3 font-medium transition-all ${
-              activeTab === 'experience'
+            className={`px-6 py-3 font-medium transition-all ${activeTab === 'experience'
                 ? 'text-cyan-400 border-b-2 border-cyan-400'
                 : 'text-gray-400 hover:text-white'
-            }`}
+              }`}
           >
             {t('section.experience')}
           </button>
@@ -367,9 +356,7 @@ const About: React.FC<AboutProps> = () => {
             </div>
           )}
 
-          {/* ─────────────────────────────────────────────────────
-              SECTION PROJETS - DYNAMIQUE VIA API GITHUB
-              ───────────────────────────────────────────────────── */}
+          {/* Projet Dynamique via Github */}
           {activeTab === 'projects' && (
             <div>
               <div className="flex items-center justify-between mb-6">
@@ -377,9 +364,9 @@ const About: React.FC<AboutProps> = () => {
                   <FaLaptopCode className="w-7 h-7 text-cyan-400" />
                   Projets GitHub
                 </h2>
-                <a 
-                  href="https://github.com/Mateo79?tab=repositories" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/Mateo79?tab=repositories"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-cyan-400 hover:underline flex items-center gap-1"
                 >
@@ -398,17 +385,17 @@ const About: React.FC<AboutProps> = () => {
               ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {githubRepos.map((repo) => (
-                    <div 
-                      key={repo.id} 
+                    <div
+                      key={repo.id}
                       className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 
                                  hover:border-purple-500 transition-colors group flex flex-col h-full"
                     >
-                      {/* Header : Nom + Lien */}
+                      {/* Nom + Lien dans le headre */}
                       <div className="flex items-center gap-2 mb-3">
                         <FaGithub className="w-5 h-5 text-purple-400" />
-                        <a 
-                          href={repo.html_url} 
-                          target="_blank" 
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-lg font-bold text-white group-hover:text-purple-400 
                                      transition-colors truncate"
@@ -423,7 +410,7 @@ const About: React.FC<AboutProps> = () => {
                         {repo.description || 'Pas de description disponible.'}
                       </p>
 
-                      {/* Footer : Langage + Stats */}
+                      {/* Langage + Stats dans fouter */}
                       <div className="flex items-center justify-between text-xs text-gray-500 mt-auto flex-wrap gap-2">
                         <div className="flex items-center gap-3">
                           {repo.language && (
@@ -438,7 +425,7 @@ const About: React.FC<AboutProps> = () => {
                           </div>
                           <div className="flex items-center gap-1">
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                             </svg>
                             <span>{repo.forks_count}</span>
                           </div>
