@@ -9,7 +9,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/mateo-padoan.io/',
   server: {
     host: 'localhost',
     port: 5173,
