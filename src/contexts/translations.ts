@@ -9,8 +9,8 @@ export const translations = {
         // About page
         'about.title': 'Mateo Padoan',
         'about.subtitle': 'Développeur & Technicien Événementiel',
-        'about.description': 'Étudiant en ingénierie informatique (Epitech) recherchant un premier poste opérationnel dans l\'événementiel (concerts, festivals) en tant que roadie/technicien plateau. Mon background tech me permet d\'appréhender rapidement les défis logistiques.',
-        'about.longDescription': 'Jeune étudiant en ingénierie informatique (Epitech) passionné par l\'événementiel live. Physiquement apte, avec un fort esprit d\'équipe et une grande adaptabilité, je combine compétences techniques et disponibilité pour contribuer au bon déroulement de vos événements.',
+        'about.description': 'Étudiant à Epitech, je recherche un stage ou un premier emploi en développement web ou en événementiel (roadie/technicien plateau). Mon background technique me permet de m\'adapter vite et de résoudre efficacement les problèmes, que ce soit devant un écran ou en coulisses d\'un concert. Motivé et disponible, je suis prêt à m\'investir dans des projets concrets qui allient technologie et terrain !',
+        'about.longDescription': 'Étudiant à Epitech, je combine développement informatique et événementiel live : derrière un écran comme en coulisses de concerts, je résous les problèmes avec méthode et réactivité. Roadie/technicien plateau, j\'allie endurance physique et logique technique pour gérer les imprévus sans stress. Mon double profil me permet de comprendre aussi bien les besoins des devs que ceux des équipes sur le terrain. Disponible immédiatement.',
 
         // Skills
         'skills.development': 'Développement',
@@ -74,13 +74,11 @@ export const translations = {
 
         // Compétences - Points
         'skills.strengths.point1': 'Apprentissage rapide grâce à un background technique solide',
-        'skills.strengths.point2': 'Esprit d\'analyse et logique',
+        'skills.strengths.point2': 'Capacité d\'analyse et de logique',
         'skills.strengths.point3': 'Esprit pratique et débrouillardise',
         'skills.strengths.point4': 'Attention aux détails et précision',
         'skills.technical.point1': 'Intérêt pour l\'électronique, le DIY et les systèmes physiques',
         'skills.technical.point2': 'Participation à des projets d\'assemblage, câblage, intégration hardware',
-        'skills.technical.point3': 'Curiosité musicale (rock, électronique, pop)',
-        'skills.technical.point4': 'Grande disponibilité (jeudi soir - dimanche)',
 
         // Centres d'intérêt
         'interests.electronics': 'Électronique & Open Source',
@@ -193,8 +191,8 @@ export const translations = {
         'nav.experience': 'Experience',
         'about.title': 'Mateo Padoan',
         'about.subtitle': 'Developer & Event Technician',
-        'about.description': 'Computer engineering student (Epitech) looking for a first operational position in live events (concerts, festivals) as a roadie/stage technician. My tech background allows me to quickly grasp logistical challenges.',
-        'about.longDescription': 'Young computer engineering student (Epitech) passionate about live events. Physically fit, with strong teamwork spirit and great adaptability, I combine technical skills and availability to contribute to the success of your events.',
+        'about.description': 'As an Epitech student, I am looking for an internship or a first job in web development or event production (roadie/stage technician). My technical background allows me to adapt quickly and solve problems efficiently, whether behind a screen or backstage at a concert. Motivated and available, I am ready to fully invest myself in hands-on projects that combine technology and fieldwork!',
+        'about.longDescription': 'As an Epitech student, I combine software development and live event production: whether behind a screen or backstage at concerts, I solve problems with method and responsiveness. As a roadie/stage technician, I combine physical endurance and technical thinking to handle unexpected situations without stress. My dual background allows me to understand both developers’ needs and the requirements of on-site teams. Available immediately.',
         'skills.development': 'Development',
         'skills.event': 'Event',
         'skills.electronics': 'Electronics',
@@ -232,8 +230,6 @@ export const translations = {
         'skills.strengths.point4': 'Attention to detail and precision',
         'skills.technical.point1': 'Interest in electronics, DIY and physical systems',
         'skills.technical.point2': 'Participation in assembly, wiring, hardware integration projects',
-        'skills.technical.point3': 'Musical curiosity (rock, electronic, pop)',
-        'skills.technical.point4': 'Great availability (Thursday evening - Sunday)',
         'interests.electronics': 'Electronics & Open Source',
         'interests.lightcontrol': 'Light/Sound Control',
         'interests.musicproduction': 'Music Production',

@@ -1,4 +1,3 @@
-// src/components/VscModal.tsx
 import { useState, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { FaTimes, FaPlay } from 'react-icons/fa';
@@ -34,7 +33,7 @@ console.log("Hello, World!");
         try {
             let result = '';
             const originalLog = console.log;
-            
+
             // Capture console.log
             console.log = (...args: any[]) => {
                 result += args.map(String).join(' ') + '\n';
@@ -53,10 +52,10 @@ console.log("Hello, World!");
             }
 
             new Function(codeToRun)();
-            
+
             console.log = originalLog;
             setOutput(result || 'Aucune sortie.');
-            
+
         } catch (err) {
             setOutput('Erreur d\'exécution : code invalide.');
         } finally {
@@ -91,15 +90,15 @@ console.log("2 + 3 =", add(2, 3));`;
     if (!isOpen) return null;
 
     return (
-        <div 
+        <div
             className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
             onMouseDown={(e) => e.stopPropagation()}
         >
             <div className="w-full max-w-6xl h-[90vh] bg-gray-900 border border-purple-500 rounded-lg overflow-hidden flex flex-col">
                 {/* Header */}
                 <div className="bg-gray-800 px-4 py-2 flex justify-between items-center">
-                    <h3 className="text-purple-400 font-mono text-sm">VS Code — Aincrad</h3>
-                    
+                    <h3 className="text-purple-400 font-mono text-sm">VS Code - Aincrad</h3>
+
                     <div className="flex items-center gap-2">
                         <select
                             value={language}
@@ -109,15 +108,14 @@ console.log("2 + 3 =", add(2, 3));`;
                             <option value="javascript">JavaScript</option>
                             <option value="typescript">TypeScript</option>
                         </select>
-                        
+
                         <button
                             onClick={runCode}
                             disabled={isRunning}
-                            className={`text-xs px-3 py-1 rounded flex items-center ${
-                                isRunning
+                            className={`text-xs px-3 py-1 rounded flex items-center ${isRunning
                                     ? 'bg-gray-600 cursor-not-allowed text-gray-400'
                                     : 'bg-green-600 hover:bg-green-700 text-white'
-                            }`}
+                                }`}
                         >
                             {isRunning ? '...' : <><FaPlay className="w-3 h-3 mr-1" /> Exécuter</>}
                         </button>
@@ -133,7 +131,7 @@ console.log("2 + 3 =", add(2, 3));`;
                 {/* Contenu */}
                 <div className="flex flex-1 overflow-hidden">
                     {/* Éditeur */}
-                    <div className="flex-1">
+                    <div className="flex-1 bg-gray-900">
                         <Editor
                             height="100%"
                             language={language}
@@ -146,6 +144,9 @@ console.log("2 + 3 =", add(2, 3));`;
                                 theme: 'vs-dark',
                                 minimap: { enabled: false },
                                 scrollBeyondLastLine: false,
+                            }}
+                            beforeMount={(monaco) => {
+                                monaco.editor.setTheme('vs-dark');
                             }}
                         />
                     </div>

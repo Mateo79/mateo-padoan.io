@@ -1,38 +1,93 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '@/contexts/useTranslation';
 import type { TranslationKey } from '@/contexts/translations';
-import { 
-  FaEnvelope, 
-  FaGraduationCap, 
-  FaLaptopCode, 
-  FaCog, 
-  FaSchool, 
-  FaTools, 
-  FaRuler, 
-  FaLightbulb, 
-  FaCheck, 
-  FaStar, 
-  FaBrain, 
-  FaKeyboard, 
-  FaDesktop, 
-  FaLinux, 
-  FaBuilding, 
-  FaWrench, 
-  FaHourglassHalf, 
-  FaBolt, FaGlobe, 
-  FaMapMarkerAlt, 
-  FaLinkedin, 
-  FaStore, 
-  FaHeadphones, 
+import faceImage from '@/assets/face.png';
+import {
+  FaEnvelope,
+  FaGraduationCap,
+  FaLaptopCode,
+  FaCog,
+  FaSchool,
+  FaTools,
+  FaRuler,
+  FaLightbulb,
+  FaCheck,
+  FaStar,
+  FaBrain,
+  FaKeyboard,
+  FaDesktop,
+  FaLinux,
+  FaBuilding,
+  FaWrench,
+  FaHourglassHalf,
+  FaBolt,
+  FaGlobe,
+  FaMapMarkerAlt,
+  FaLinkedin,
+  FaStore,
+  FaHeadphones,
   FaMusicSolid,
-  SiGithub, 
-  SiPython, 
-  SiC, 
-  SiReact, 
-  SiTypescript, 
+  FaGithub,
+  SiGithub,
+  SiPython,
+  SiC,
+  SiReact,
+  SiTypescript,
   SiTailwindcss,
-  FiClock, FiCheck as FiCheckIcon
+  FiClock,
+  FiCheck as FiCheckIcon
 } from '../components/icons/ReactIcons';
+
+// ─────────────────────────────────────────────────────────────
+// Types & Utilitaires GitHub API
+// ─────────────────────────────────────────────────────────────
+
+interface GithubRepo {
+  id: number;
+  name: string;
+  description: string | null;
+  html_url: string;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  updated_at: string;
+  fork: boolean;
+}
+
+const fetchGithubRepos = async (): Promise<GithubRepo[]> => {
+  try {
+    const response = await fetch(
+      'https://api.github.com/users/Mateo79/repos?sort=updated&per_page=10'
+    );
+    if (!response.ok) throw new Error('Erreur API GitHub');
+    
+    const data = await response.json();
+    // Garde uniquement tes repos (pas les forks)
+    return data.filter((repo: GithubRepo) => !repo.fork);
+  } catch {
+    return [];
+  }
+};
+
+const getLanguageColor = (lang: string | null): string => {
+  const colors: Record<string, string> = {
+    TypeScript: 'bg-blue-500',
+    JavaScript: 'bg-yellow-400',
+    Python: 'bg-blue-400',
+    C: 'bg-blue-700',
+    'C++': 'bg-pink-600',
+    HTML: 'bg-orange-500',
+    CSS: 'bg-purple-500',
+    Java: 'bg-red-500',
+    Go: 'bg-cyan-600',
+    Rust: 'bg-orange-600',
+  };
+  return colors[lang || ''] || 'bg-gray-500';
+};
+
+// ─────────────────────────────────────────────────────────────
+// Composant Principal
+// ─────────────────────────────────────────────────────────────
 
 interface AboutProps {
   onPageChange?: (page: 'about' | 'dashboard') => void;
@@ -41,6 +96,20 @@ interface AboutProps {
 const About: React.FC<AboutProps> = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'about' | 'projects' | 'experience'>('about');
+  
+  // State pour les repos GitHub
+  const [githubRepos, setGithubRepos] = useState<GithubRepo[]>([]);
+  const [reposLoading, setReposLoading] = useState(true);
+
+  // Fetch des repos au montage du composant
+  useEffect(() => {
+    const loadRepos = async () => {
+      const repos = await fetchGithubRepos();
+      setGithubRepos(repos);
+      setReposLoading(false);
+    };
+    loadRepos();
+  }, []);
 
   const skillKeys: TranslationKey[] = [
     'skills.development',
@@ -68,9 +137,9 @@ const About: React.FC<AboutProps> = () => {
           {/* Photo de profil */}
           <div className="relative group">
             <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-purple-500 shadow-2xl">
-              <img 
-                src="/face.png" 
-                alt="Mateo Padoan" 
+              <img
+                src={faceImage}
+                alt="Mateo Padoan"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -88,11 +157,11 @@ const About: React.FC<AboutProps> = () => {
             <p className="text-gray-300 text-lg leading-relaxed max-w-2xl">
               {t('about.description')}
             </p>
-            
+
             {/* Tags de compétences */}
             <div className="flex flex-wrap gap-2 mt-6 justify-center md:justify-start">
               {skillKeys.map((skillKey) => (
-                <span 
+                <span
                   key={skillKey}
                   className="px-4 py-2 bg-purple-600/30 border border-purple-500 rounded-full text-purple-300 text-sm hover:bg-purple-600/50 transition-colors cursor-default"
                 >
@@ -263,14 +332,6 @@ const About: React.FC<AboutProps> = () => {
                         <FaCheck className="text-cyan-400 mt-0.5 w-4 h-4" />
                         <span>{t('skills.technical.point2')}</span>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <FaCheck className="text-cyan-400 mt-0.5 w-4 h-4" />
-                        <span>{t('skills.technical.point3')}</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <FaCheck className="text-cyan-400 mt-0.5 w-4 h-4" />
-                        <span>{t('skills.technical.point4')}</span>
-                      </li>
                     </ul>
                   </div>
                 </div>
@@ -284,7 +345,7 @@ const About: React.FC<AboutProps> = () => {
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {interestKeys.map((interestKey) => (
-                    <span 
+                    <span
                       key={interestKey}
                       className="px-4 py-2 bg-gradient-to-r from-purple-600/30 to-cyan-600/30 border border-purple-500 rounded-lg text-gray-300 hover:border-cyan-400 transition-colors flex items-center gap-2"
                     >
@@ -319,131 +380,90 @@ const About: React.FC<AboutProps> = () => {
             </div>
           )}
 
+          {/* ─────────────────────────────────────────────────────
+              SECTION PROJETS - DYNAMIQUE VIA API GITHUB
+              ───────────────────────────────────────────────────── */}
           {activeTab === 'projects' && (
             <div>
-              <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-2">
-                <FaLaptopCode className="w-7 h-7" />
-                {t('section.projects')}
-              </h2>
-              <p className="text-gray-400 mb-6">{t('projects.description')}</p>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* WHITE2LIGHT */}
-                <div className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group">
-                  <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors flex items-center gap-2">
-                    <FaLightbulb className="w-5 h-5 text-yellow-400" />
-                    WHITE2LIGHT
-                  </h3>
-                  <p className="text-gray-400 mt-2 text-sm">
-                    {t('projects.white2light.description')}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-xs px-2 py-1 bg-purple-600/30 rounded flex items-center gap-1">
-                      <FaBolt className="w-3 h-3" /> {t('tags.electronics')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-cyan-600/30 rounded flex items-center gap-1">
-                      <FaGlobe className="w-3 h-3" /> {t('tags.opensource')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-yellow-600/30 rounded flex items-center gap-1">
-                      <FaMusicSolid className="w-3 h-3" /> {t('tags.avcontrol')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-green-600/30 rounded flex items-center gap-1">
-                      <FaStar className="w-3 h-3" /> {t('tags.event')}
-                    </span>
-                  </div>
-                  <a 
-                    href="https://github.com/Mateo79" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-4 block w-full py-2 bg-purple-600 hover:bg-purple-700 rounded text-white text-center transition-colors"
-                  >
-                    {t('common.viewProject')} →
-                  </a>
-                </div>
-
-                {/* GOMOKU */}
-                <div className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group">
-                  <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors flex items-center gap-2">
-                    <FaBrain className="w-5 h-5 text-purple-400" />
-                    GOMOKU AI
-                  </h3>
-                  <p className="text-gray-400 mt-2 text-sm">
-                    {t('projects.gomoku.description')}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-xs px-2 py-1 bg-purple-600/30 rounded flex items-center gap-1">
-                      <FaBrain className="w-3 h-3" /> {t('tags.ai')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-cyan-600/30 rounded flex items-center gap-1">
-                      <FaCog className="w-3 h-3" /> {t('tags.algorithms')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-yellow-600/30 rounded flex items-center gap-1">
-                      <SiPython className="w-3 h-3" /> Python
-                    </span>
-                  </div>
-                  <button 
-                    onClick={() => {/* Ouvrir modal Gomoku */}}
-                    className="mt-4 block w-full py-2 bg-purple-600 hover:bg-purple-700 rounded text-white text-center transition-colors"
-                  >
-                    {t('common.testGame')} →
-                  </button>
-                </div>
-
-                {/* MINISHELL */}
-                <div className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group">
-                  <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors flex items-center gap-2">
-                    <FaKeyboard className="w-5 h-5 text-cyan-400" />
-                    MINISHELL
-                  </h3>
-                  <p className="text-gray-400 mt-2 text-sm">
-                    {t('projects.minishell.description')}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-xs px-2 py-1 bg-purple-600/30 rounded flex items-center gap-1">
-                      <SiC className="w-3 h-3" /> C
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-cyan-600/30 rounded flex items-center gap-1">
-                      <FaDesktop className="w-3 h-3" /> {t('tags.system')}
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-red-600/30 rounded flex items-center gap-1">
-                      <FaLinux className="w-3 h-3" /> Unix
-                    </span>
-                  </div>
-                  <a 
-                    href="https://github.com/Mateo79" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-4 block w-full py-2 bg-purple-600 hover:bg-purple-700 rounded text-white text-center transition-colors"
-                  >
-                    {t('common.viewOnGithub')} →
-                  </a>
-                </div>
-
-                {/* Portfolio Web OS */}
-                <div className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group">
-                  <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors flex items-center gap-2">
-                    <FaDesktop className="w-5 h-5 text-cyan-400" />
-                    Portfolio Web OS
-                  </h3>
-                  <p className="text-gray-400 mt-2 text-sm">
-                    {t('projects.portfolio.description')}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <span className="text-xs px-2 py-1 bg-purple-600/30 rounded flex items-center gap-1">
-                      <SiReact className="w-3 h-3" /> React
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-cyan-600/30 rounded flex items-center gap-1">
-                      <SiTypescript className="w-3 h-3" /> TypeScript
-                    </span>
-                    <span className="text-xs px-2 py-1 bg-blue-600/30 rounded flex items-center gap-1">
-                      <SiTailwindcss className="w-3 h-3" /> Tailwind
-                    </span>
-                  </div>
-                  <span className="mt-4 block w-full py-2 bg-gray-600 rounded text-gray-400 text-center cursor-not-allowed flex items-center justify-center gap-1">
-                    <FaHourglassHalf className="w-3 h-3" /> {t('common.inProgress')}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-white flex items-center gap-2">
+                  <FaLaptopCode className="w-7 h-7 text-cyan-400" />
+                  Projets GitHub
+                </h2>
+                <a 
+                  href="https://github.com/Mateo79?tab=repositories" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-cyan-400 hover:underline flex items-center gap-1"
+                >
+                  Voir tout sur GitHub →
+                </a>
               </div>
+
+              {reposLoading ? (
+                <div className="text-center py-20 text-gray-500 animate-pulse">
+                  Chargement des projets...
+                </div>
+              ) : githubRepos.length === 0 ? (
+                <div className="text-center py-20 text-gray-400">
+                  Aucun projet public trouvé.
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {githubRepos.map((repo) => (
+                    <div 
+                      key={repo.id} 
+                      className="bg-gray-700/50 p-6 rounded-lg border border-gray-600 
+                                 hover:border-purple-500 transition-colors group flex flex-col h-full"
+                    >
+                      {/* Header : Nom + Lien */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <FaGithub className="w-5 h-5 text-purple-400" />
+                        <a 
+                          href={repo.html_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-lg font-bold text-white group-hover:text-purple-400 
+                                     transition-colors truncate"
+                          title={repo.name}
+                        >
+                          {repo.name}
+                        </a>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-gray-400 text-sm mb-4 flex-grow line-clamp-3">
+                        {repo.description || 'Pas de description disponible.'}
+                      </p>
+
+                      {/* Footer : Langage + Stats */}
+                      <div className="flex items-center justify-between text-xs text-gray-500 mt-auto flex-wrap gap-2">
+                        <div className="flex items-center gap-3">
+                          {repo.language && (
+                            <div className="flex items-center gap-1">
+                              <span className={`w-2.5 h-2.5 rounded-full ${getLanguageColor(repo.language)}`} />
+                              <span>{repo.language}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1">
+                            <FaStar className="w-3 h-3" />
+                            <span>{repo.stargazers_count}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            <span>{repo.forks_count}</span>
+                          </div>
+                        </div>
+                        <span className="text-gray-600">
+                          {new Date(repo.updated_at).toLocaleDateString('fr-FR')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -453,7 +473,7 @@ const About: React.FC<AboutProps> = () => {
                 <FaBuilding className="w-7 h-7" />
                 {t('section.experience')}
               </h2>
-              
+
               {/* White2Net */}
               <div className="border-l-4 border-purple-500 pl-6 py-2 bg-gray-800/30 p-6 rounded-r-lg">
                 <div className="flex justify-between items-start mb-2">
